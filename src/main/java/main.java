@@ -97,19 +97,19 @@ public class main {
                 .color(Color.BLUE)
                 .title("Title")
                 .url("https://neliosoftware.com/es/blog/imagenes-gratuitas-para-tu-blog/")
-                .author("MARTA", "https://neliosoftware.com/es/blog/imagenes-gratuitas-para-tu-blog/", "https://neliosoftware.com/es/wp-content/uploads/sites/3/2018/07/Screenshot-of-Unsplah-website-1024x694.png")
-                .description("imagen")
-                .thumbnail("https://neliosoftware.com/es/wp-content/uploads/sites/3/2018/07/Screenshot-of-Unsplah-website-1024x694.png")
-                .addField("imagenes", "imagenes", true)
+                .author("MARTA", "https://docs.google.com/document/d/1tydL3YBPH09OVxhUBW632ryRB_LCm30kQu0CXsFmV7o/edit?usp=sharing", "https://docs.google.com/document/d/1tydL3YBPH09OVxhUBW632ryRB_LCm30kQu0CXsFmV7o/edit?usp=sharing")
+                .description("examen")
+                .thumbnail("https://docs.google.com/document/d/1tydL3YBPH09OVxhUBW632ryRB_LCm30kQu0CXsFmV7o/edit?usp=sharing")
+                .addField("examen", "examen", true)
                 .addField("\u200B", "\u200B", true)
-                .addField("imagen", "imagen", true)
-                .image("https://neliosoftware.com/es/wp-content/uploads/sites/3/2018/07/Screenshot-of-Unsplah-website-1024x694.png")
+                .addField("examen", "examen", true)
+                .image("https://docs.google.com/document/d/1tydL3YBPH09OVxhUBW632ryRB_LCm30kQu0CXsFmV7o/edit?usp=sharing")
                 .timestamp(Instant.now())
-                .footer("imagen", "https://neliosoftware.com/es/wp-content/uploads/sites/3/2018/07/Screenshot-of-Unsplah-website-1024x694.png")
+                .footer("examen", "https://docs.google.com/document/d/1tydL3YBPH09OVxhUBW632ryRB_LCm30kQu0CXsFmV7o/edit?usp=sharing")
                 .build();
         gateway.on(MessageCreateEvent.class).subscribe(event -> {
             final Message message = event.getMessage();
-            if ("!embed".equals(message.getContent())) {
+            if ("/pdf".equals(message.getContent())) {
                 final MessageChannel channel = message.getChannel().block();
                 channel.createMessage(embed).block();
 
@@ -123,7 +123,7 @@ public class main {
 
         // Filtra para encontrar la carpeta que se llama imagenesBot
         FileList result = service.files().list()
-                .setQ("name contains 'imagenes' and mimeType = 'application/vnd.google-apps.folder'")
+                .setQ("name contains 'examen' and mimeType = 'application/vnd.google-apps.folder'")
                 .setPageSize(100)
                 .setSpaces("drive")
                 .setFields("nextPageToken, files(id, name)")
@@ -133,28 +133,28 @@ public class main {
         if (files == null || files.isEmpty()) {
             System.out.println("No files found.");
         } else {
-            String dirImagenes = null;
+            String dirPdf = null;
             System.out.println("Files:");
             for (File file : files) {
                 System.out.printf("%s (%s)\n", file.getName(), file.getId());
-                dirImagenes = file.getId();
+                dirPdf = file.getId();
             }
             // busco la imagen en el directorio
-            FileList resultImagenes = service.files().list()
-                    .setQ("name contains 'imagen' and parents in '"+dirImagenes+"'")
+            FileList resultPdf = service.files().list()
+                    .setQ("name contains 'examen' and parents in '"+dirPdf+"'")
                     .setSpaces("drive")
                     .setFields("nextPageToken, files(id, name)")
                     .execute();
-            List<File> filesImagenes = resultImagenes.getFiles();
+            List<File> filesPdf = resultPdf.getFiles();
             gateway.on(MessageCreateEvent.class).subscribe(event -> {
                 final Message message = event.getMessage();
                 if ("!lista_drive".equals(message.getContent())) {
-                    for (File file : filesImagenes) {
+                    for (File file : filesPdf) {
 
                         // guardamos el 'stream' en el fichero aux.jpeg qieune qe existir
                         OutputStream outputStream = null;
                         try {
-                            outputStream = new FileOutputStream("C:\\Users\\Interno\\IdeaProjects\\BotDiscord\\src\\main\\java\\imagenes\\imagen.jpg");
+                            outputStream = new FileOutputStream("C:\\Users\\Interno\\Documents\\examen.pdf");
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }

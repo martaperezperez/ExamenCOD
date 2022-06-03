@@ -84,16 +84,7 @@ public class main {
         final GatewayDiscordClient gateway = client.login().block();
 
 
-
-        gateway.on(MessageCreateEvent.class).subscribe(event -> {
-            final Message message = event.getMessage();
-            if ("!ping".equals(message.getContent())) {
-                final MessageChannel channel = message.getChannel().block();
-                channel.createMessage("Pong!").block();
-
-          }
-        });
-        EmbedCreateSpec embed = EmbedCreateSpec.builder()
+        EmbedCreateSpec pdf = EmbedCreateSpec.builder()
                 .color(Color.BLUE)
                 .title("Title")
                 .url("https://neliosoftware.com/es/blog/imagenes-gratuitas-para-tu-blog/")
@@ -111,7 +102,7 @@ public class main {
             final Message message = event.getMessage();
             if ("/pdf".equals(message.getContent())) {
                 final MessageChannel channel = message.getChannel().block();
-                channel.createMessage(embed).block();
+                channel.createMessage(pdf).block();
 
             }
         });
